@@ -1,0 +1,15 @@
+/**
+ * 4-bit ripple carry adder constructed using full adders.
+ * Student name(s): Zach Hammad
+ */
+
+CHIP RippleCarryAdder4 {
+    IN x[4], y[4], cin;     // 4-bit inputs
+    OUT z[4], cout;         // 4-bit output, 1 carry out bit
+
+    PARTS: 
+    FullAdder(x=x[0], y=y[0], cin=cin, z=z[0], cout=co1);
+    FullAdder(x=x[1], y=y[1], cin=co1, z=z[1], cout=co2);
+    FullAdder(x=x[2], y=y[2], cin=co2, z=z[2], cout=co3);
+    FullAdder(x=x[3], y=y[3], cin=co3, z=z[3], cout=cout);
+}

@@ -1,0 +1,39 @@
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ * 
+ * Author: Naga Kandasamy
+ * Date created: July 12, 2020
+
+ * Student name(s): Zach Hammad
+ *
+ * Notes: Hardware project from the book "The Elements of Computing Systems" by Nisan and Schocken, MIT Press.
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    /* Implementation tip: A larger RAM unit can be built by grouping smaller RAM-parts together.
+       Think about the RAM’s address input as consisting of two fields: 
+       one field can be used to select a RAM-part;
+       the other field can be used to select a register within that RAM-part
+       Use mux/demux logic to effect this addressing scheme.
+*/
+    PARTS:
+    //RAM64 is made of 8 RAM8's
+    //First 3 MSB are used to determine which RAM8 to go to (address[0..2])
+    //last 3 LSB are used to select a register within the RAM8 (address[3..5])
+    DMux8Way(in=load, sel=address[0..2], a=ram1, b=ram2, c=ram3, d=ram4, e=ram5, f=ram6, g=ram7, h=ram8);
+    RAM8(in=in, load=ram1, address=address[3..5], out=ram1out);
+    RAM8(in=in, load=ram2, address=address[3..5], out=ram2out);
+    RAM8(in=in, load=ram3, address=address[3..5], out=ram3out);
+    RAM8(in=in, load=ram4, address=address[3..5], out=ram4out);
+    RAM8(in=in, load=ram5, address=address[3..5], out=ram5out);
+    RAM8(in=in, load=ram6, address=address[3..5], out=ram6out);
+    RAM8(in=in, load=ram7, address=address[3..5], out=ram7out);
+    RAM8(in=in, load=ram8, address=address[3..5], out=ram8out);
+    Mux8Way16(a=ram1out, b=ram2out, c=ram3out, d=ram4out, e=ram5out, f=ram6out, g=ram7out, h=ram8out, sel=address[0..2], out=out);
+}
